@@ -1,0 +1,15 @@
+<div class="text-center border-end border-3" style="position: absolute; width: 200px; top: 75px; min-height: 90%">
+  <div class="mt-5">
+  <p class="mx-5">
+    <a href="{{ url_for('get_files', page=1 )}}">Files</a>
+  </p>
+  {% if current_user.is_authenticated %}
+  <p class="mx-5 link">
+    <a href="{{ url_for('get_replications', page=1 )}}">Replications</a>
+  </p>
+  <p class="mx-5">
+    <a href="{{ url_for('get_actions', page=1) }}">Actions</a>
+  </p>
+  {% endif %}
+  </div>
+</div>

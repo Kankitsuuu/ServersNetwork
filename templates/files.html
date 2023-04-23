@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'sidenav.html' %}
+{% include 'flashes.html' %}
+{% if current_user.is_authenticated %}
+<div class="d-flex justify-content-center mx-auto mt-2">
+    <p id="response" class="text-center text-primary me-2"></p>
+    <div class="loader" id="loader" style="display: none"></div>
+</div>
+<!-- JS form -->
+<div id="upload-form" class="container mx-auto mt-2">
+    <form name="ourForm">
+        <div class="d-flex justify-content-center text-center mb-3">
+        <input class="form-control mx-3" style="width: 400px;" name="ourForm__url" type="text" placeholder="File URL">
+        <button type="submit" class="btn btn-success" name="ourForm__btn">Upload</button>
+        </div>
+    </form>
+</div>
+<!-- end JS form -->
+{% endif %}
+<div style="margin-left: 200px;">
+<!-- File table -->
+{% if files.items %}
+<div class="container me-auto mt-2">
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th class="w-25">Name</th>
+        <th class="text-center">File type</th>
+        <th class="text-center">Uploaded by</th>
+        <th class="text-center">Upload time UTC</th>
+        <th class="text-center">Download</th>
+        {% if current_user.is_admin %}
+        <th class="text-center">Delete</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for f in files %}
+      <tr>
+        <td>
+              <p class="fw-bold mb-1">{{ f.name }}</p>
+        </td>
+        <td class="text-center">
+              <p class="fw-bold mb-1 ">{{ f.file_type }}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{f.fk_user.username}}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{ f.upload_time.strftime('%y-%m-%d %H:%M:%S')}}</p>
+        </td>
+        <td class="text-center">
+          <a href="{{ url_for('download', file_url=f.url) }}" class="btn btn-primary ">Download</a>
+        </td>
+        {% if current_user.is_admin %}
+          <td class="text-center">
+            <a href="{{url_for('delete_file', file_url=f.url)}}" type="button" class="btn btn-danger">
+              Delete
+            </a>
+          </td>
+        {% endif %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- End File table -->
+{% else %}
+<h1 class="text-center" style="margin-left: -200px;">There are no files at now</h1>
+{% endif %}
+
+{% if files.pages > 1 %}
+<!-- Pagination -->
+<nav aria-label="Page navigation example" class="mx-auto">
+  <ul class="pagination  mt-4 justify-content-center">
+    {% if files.has_prev %}
+    <li class="page-item mx-2">
+      <a class="page-link" href="{{ url_for('get_files', page=files.prev_num) }}" aria-label="Previous">
+        <span aria-hidden="false">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item mx-2"><a class="page-link" href="{{ url_for('get_files', page=files.prev_num) }}">{{ files.prev_num }}</a></li>
+    {% endif %}
+    <li class="page-item active mx-2"><p class="page-link"> {{files.page}} </p></li>
+    {% if files.has_next %}
+    <li class="page-item mx-2"><a class="page-link" href="{{ url_for('get_files', page=files.next_num) }}">{{ files.next_num }}</a></li>
+    <li class="page-item mx-2">
+      <a class="page-link" href="{{ url_for('get_files', page=files.next_num) }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+<!-- End Pagination -->
+</div>
+<script src="{{url_for('static', filename='js/upload.js')}}"></script>
+{% endblock %}

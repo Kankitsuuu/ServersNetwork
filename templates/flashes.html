@@ -1,0 +1,11 @@
+{% for cat, msg in get_flashed_messages(True) %}
+    {% if cat=='error' %}
+        <div class="text-center mx-auto mt-2 text-danger">
+          <p class="m-0">{{msg}}</p>
+        </div>
+    {% else %}
+        <div class="text-center mx-auto mt-2 text-success">
+          <p class="m-0">{{msg}}</p>
+        </div>
+    {% endif %}
+{% endfor %}

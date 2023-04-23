@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-center" style="margin-top: 200px;">
+<form action="" method="post" class="form-contact">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">{% include 'flashes.html' %} </div>
+    <p>{{ form.username() }}</p>
+    <p>{{ form.password() }}</p>
+    <div class="text-center">
+    <p class="mx-2 my-2"  style="margin-top: 2px;">{{ form.remember.label() }} {{ form.remember() }}</p>
+    <p><button type="submit" class="btn btn-primary mx-2">Login</button></p>
+    </div>
+<hr class="hr hr-blurry mx-3">
+</form>
+</div>
+{% endblock %}

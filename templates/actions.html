@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'sidenav.html' %}
+{% include 'flashes.html' %}
+<!-- File table -->
+{% if actions.items %}
+<div style="margin-left: 200px;">
+<div class="container me-auto mt-4">
+  <table class="table align-middle mb-0 bg-white">
+    <thead class="bg-light">
+      <tr>
+        <th class="text-center">ID</th>
+        <th class="text-center">Server</th>
+        <th class="text-center">User</th>
+        <th class="text-center">Action type</th>
+        <th class="text-center">Action time</th>
+        <th class="text-center">Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in actions %}
+      <tr>
+        <td class="text-center">
+              <p class="fw-bold mb-1">{{ a.id }}</p>
+        </td>
+        <td class="text-center">
+              <p class="fw-bold mb-1 ">VPS{{ a.server }} {{ a.fk_server.country }}, {{ a.fk_server.city }} {{ a.fk_server.ip}}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{ a.username }}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{ a.action_type }}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{ a.action_time.strftime('%y-%m-%d %H:%M:%S')}}</p>
+        </td>
+        <td class="text-center">
+          <p class="fw-bold mb-1 ">{{ a.duration }} sec</p>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<!-- End File table -->
+{% if actions.pages > 1 %}
+<!-- Pagination -->
+<nav aria-label="Page navigation example" class="mx-auto">
+  <ul class="pagination  mt-4 justify-content-center">
+    {% if actions.has_prev %}
+    <li class="page-item mx-2">
+      <a class="page-link" href="{{ url_for('get_actions', page=actions.prev_num) }}" aria-label="Previous">
+        <span aria-hidden="false">&laquo;</span>
+      </a>
+    </li>
+    <li class="page-item mx-2"><a class="page-link" href="{{ url_for('get_actions', page=actions.prev_num) }}">{{ actions.prev_num }}</a></li>
+    {% endif %}
+    <li class="page-item active mx-2"><p class="page-link"> {{ actions.page }} </p></li>
+    {% if actions.has_next %}
+    <li class="page-item mx-2"><a class="page-link" href="{{ url_for('get_actions', page=actions.next_num) }}">{{ actions.next_num }}</a></li>
+    <li class="page-item mx-2">
+      <a class="page-link" href="{{ url_for('get_actions', page=actions.next_num) }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+<!-- End Pagination -->
+{% else %}
+<h1 class="text-center mt-3" style="margin-left: -200px;">There is no registered actions here yet</h1>
+{% endif %}
+</div>
+{% endblock %}
